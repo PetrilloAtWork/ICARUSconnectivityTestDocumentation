@@ -1,19 +1,114 @@
-\documentclass{report}
-\usepackage[utf8]{inputenc}
+%
+% main.tex
+%
+% This file contains only the skeleton of the technical note:
+%  * package import and setup
+%  * page setting
+%  * author list
+%  * title page
+% 
+% The rest of the content is imported from other files.
+%
+
+
+\documentclass{article}
+
+% \usepackage[margin=1in]{geometry} 
+\usepackage{amsmath,amsthm,amssymb,amsfonts}
+\usepackage{float}
+\usepackage{graphicx}
+\usepackage{fancyhdr}
+% \usepackage{url}           % for on-line citations
+% \usepackage{bm}            % special 'bold-math' package 
+% \usepackage{graphics}      % standard graphics specifications
+\usepackage{authblk}  % allows more complex multi-author, multi-affiliation author list
+\usepackage{natbib}   % bibliography as Overleaf likes
+
+% \usepackage[dvipsnames,table]{xcolor}
+% \usepackage{subfig}
+
+
+%for the links
+% \usepackage{color}
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks=true, % make the links colored
+    linkcolor=blue, % color TOC links in blue
+    urlcolor=red, % color URLs in red
+    linktoc=all
+    } % 'all' will create links for everything in the TOC
+
+\usepackage{cleveref} % \cref and \Cref for "clever" reference text; needs to be loaded after hyperref
+
+% \usepackage{sectsty}
+% \subsectionfont{\fontsize{12}{15}\selectfont\centering}
+% \sectionfont{\fontsize{12}{15}\selectfont\centering}
+% \renewcommand\thesection{\Roman{section}}
+% \renewcommand\thesubsection{\Alph{subsection}}
+% \renewcommand{\familydefault}{\updefault}
+
+% Set up fancy header/footer
+\pagestyle{fancy}
+\fancyhead[LO,L]{T600 Detector}
+\fancyhead[CO,C]{\title{}}
+\fancyhead[RO,R]{}
+\fancyfoot[LO,L]{}
+\fancyfoot[CO,C]{\thepage}
+\fancyfoot[RO,R]{}
+% \renewcommand{\headrulewidth}{0.4pt}
+% \renewcommand{\footrulewidth}{0.4pt}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Front page definition
+%%%
+
 
 \title{ICARUS connectivity test}
-\author{}
-\date{September 2018}
 
-\usepackage{natbib}
-\usepackage{graphicx}
 
+\author[a]{Brenda~G\'omez \thanks{gomez.cortes14@gmail.com}}
+\affil[a]{Universidad de Colima}
+
+\author[b]{Angela~Fava \thanks{afava@fnal.gov}}
+\affil[b]{Fermi National Accelerator Laboratory}
+
+\author[c]{Mark~Convery \thanks{convery@slac.stanford.edu}}
+\author[c]{Gianluca~Petrillo \thanks{petrillo@slac.stanford.edu}}
+\author[c]{Yun-Tse~Tsai \thanks{yuntse@slac.stanford.edu}}
+\affil[c]{SLAC National Accelerator Laboratory}
+
+\author[z]{Somebody~else \thanks{somebody@institution.edu}}
+\author[z]{adding the others is a to-do \thanks{of course}}
+\affil[z]{Someone's institution}
+
+\date{\today}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
 \maketitle
 
+\input{sections/abstract}
+
+\tableofcontents
+
+\include{sections/introduction}
+
+\include{sections/detector}
+
+\include{sections/test}
+
+\include{sections/analysis}
+
+\include{sections/results}
+
+
 % uncomment when we actually have some references to refer to
 % \bibliographystyle{plain}
-% \bibliography{references}
+% \bibliography{references} % check references.bib
+
 
 \end{document}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
