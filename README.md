@@ -10,7 +10,7 @@ Structure of the repository
 
 The repository is structured in few subdirectories:
     
-    /              main file (`main.tex`), skeleton of the document
+    /              main file (`ConnectivityTestTechnicalNote.tex`), skeleton of the document
         sections/  content of the note, one file per section, and abstract
         fig/       all images
 
