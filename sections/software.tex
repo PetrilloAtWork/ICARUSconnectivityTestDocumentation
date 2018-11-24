@@ -1,0 +1,135 @@
+\section{Supporting library software}
+\label{app:supporting-library-software}
+
+The analysis is supported by a utility library which is available as GIT
+repository, with the main repository being stored by GitHub at
+\texttt{github.com:PetrilloAtWork/ICARUSconnectivityTest.git}. It is
+possible to download it with:
+
+\begin{verbatim}
+git clone git@github.com:PetrilloAtWork/ICARUSconnectivityTest.git
+\end{verbatim}
+
+or equivalent.\\
+
+The analysis library used for the online analysis is tagged as
+\texttt{v03\_00}. In that version, both waveform parsing and analysis
+code are in \texttt{drawWaveforms.py}.\\
+
+Utility classes are provided:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{WaveformSourceInfo}: a data structure describing a waveform by
+  its parameters: chimney, connection, test box switch position,
+  oscilloscope channel and index
+
+  \begin{itemize}
+  \tightlist
+  \item
+    \texttt{channel} attribute is provided with the number of connection
+    channel, computed from the switch position and oscilloscope channel
+    and ranging between \texttt{1} and \texttt{32}
+  \item
+    \texttt{increaseIndex()} is a shortcut to increase the index
+    attribute
+  \item
+    \texttt{firstIndexOf(position)} is a static method returning the
+    index of the first waveform on a given switch position
+  \end{itemize}
+\item
+  \texttt{WaveformSourceParser}: a class that represents the group of
+  waveform files which contains a specified one, the ``triggering
+  file'':
+
+  \begin{itemize}
+  \tightlist
+  \item
+    the triggering file is specified at construction or with
+    \texttt{parse()} method
+  \item
+    the parameters of the triggering files are accessible via
+    \texttt{sourceInfo} (a \texttt{WaveformSourceInfo} instance)
+  \item
+    the pattern of the file path is stored as
+    \texttt{sourceFilePattern}, and a full file name can be obtained by
+    \texttt{sourceFilePattern\ \%\ sourceInfo} (with \texttt{sourceInfo}
+    \emph{any} valid \texttt{WaveformSourceInfo})
+  \item
+    the list of expected names for all \texttt{N} files at the current
+    (or the specified) oscilloscope channel can be obtained via
+    \texttt{allChannelSources()}
+  \item
+    the list of expected names for all \texttt{4N} files at the current
+    test box switch position can be obtained via
+    \texttt{allPositionSources()}
+  \end{itemize}
+\end{itemize}
+
+Plotting functions:
+
+\begin{itemize}
+\tightlist
+\item
+  \texttt{plotWaveformFromFile()} creates and returns a single
+  \texttt{TGraph} with the specified waveforms
+\item
+  \texttt{plotAllPositionWaveforms()} returns a \texttt{TCanvas} split
+  in as many pads as there are oscilloscope channels (\texttt{4}), and
+  plots in each pad all the waveforms from a channel
+
+  \begin{itemize}
+  \tightlist
+  \item
+    the first argument is a \texttt{WaveformSourceParser} object which
+    determines which waveforms are plotted (equivalent to
+    \texttt{allPositionSources()})
+  \item
+    the vertical range of all graphs is fixed to be at least between 1
+    and 3 volt
+  \item
+    statistics are extracted and printed in each pad, as documented
+    below
+  \end{itemize}
+\item
+  \texttt{plotAllPositionsAroundFile()} plots all the waveforms for the
+  same connector and test box switch position as the one of the
+  specified waveform file; the plots are described with
+  \texttt{plotAllPositionWaveforms()} above
+\end{itemize}
+
+The statistics box of the plots includes: * ``waveforms'': the number
+\texttt{N} of waveforms in the plot (typically 10) * ``baseline'': the
+average of the \texttt{N} baselines of the \texttt{N} waveforms, each
+one computed with \texttt{extractBaseline()} algorithm * ``RMS'': the
+average of the \texttt{N} RMS on the baseline of the \texttt{N}
+waveforms; this is a quantification of the average noise * ``maximum'':
+for each waveform, the largest value is found; the \emph{maximum} is the
+average of the distribution of maxima from the \texttt{N} waveforms, and
+the uncertainty is its error * ``peak'': for each waveform, the positive
+and negative peaks are found over the baseline, and the largest is used;
+the \emph{peak} is the average of the distribution of single waveform
+peaks * ``RMS'' is the RMS of that peak value distribution. \\
+
+Additionally, a small statistics library is provided: *
+\texttt{MinAccumulator}, \texttt{MaxAccumulator},
+\texttt{ExtremeAccumutator}, \texttt{MinAccumulatorN},
+\texttt{MaxAccumulatorN} and \texttt{ExtremeAccumutatorN} remember the
+\emph{N} largest or smallest (or both) of the values that are
+\texttt{add()}'ed to them * \texttt{StatAccumulator} gives average,
+error, RMS and related quantites, of the sample given to it element by
+element (via \texttt{add()} call) \\
+
+The fundamental analysis algorithms applied on a single waveform are: *
+\texttt{findMaximum()}, \texttt{findMinimum()} and
+\texttt{findExtremes()} return the position respectively of the maximum,
+of the minimum and of both, within the list of values in argument *
+\texttt{extractBaselineFromPedestal()} extracts the baseline and its RMS
+and uncertainty, as average of the samples in the start of the waveform
+* \texttt{extractBaseline()} extracts the baseline of the waveform and
+its RMS and uncertainty, as described in the previous section *
+\texttt{extractPeaks()} extracts the value and location of the two peaks
+of the waveform, with uncertainties, as described in the previous
+section * \texttt{extractStatistics()} runs many of the previous
+algorithms, and also select the absolute peak.
