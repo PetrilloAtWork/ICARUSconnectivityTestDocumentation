@@ -11,23 +11,46 @@ Since horizontal cables can't get a pulse injected, there was a slightly differe
 \subsection{Test box}
 \label{ssec:TestBox}
 
-The SLAC test box (Fig.) was designated specially for the ICARUS TPC wire plane connectivity tests. It's a portable battery powered device with dimensions $20\times 15\times 10$ cm.\\
+The SLAC test box (\cref{fig:TestBox}) was designated specially for the ICARUS TPC wire plane connectivity tests. It's a portable battery powered device with dimensions $20\times 15\times 10$ cm.\\
 
 \begin{figure}[htb]
 \centering
 \includegraphics[width=0.8\linewidth]{fig/box1}
-\caption{SLAC test box version 1}
+\caption{\label{fig:TestBox}SLAC test box version 1}
 \end{figure}
 
 On the lid it contains:
 \begin{itemize}
 \item Built in pulser outputs on LEMO with both polarities,
 \item Connector for a single flat ribbon of twisted-pairs cable: TPC cables plug into this connector with all grounds connected together.
-\item An 8-position rotary switch that switches all 4 channels at a time,
-\item The test pulse: $100$ Hz, $5$ V, $1 \mu $s rise time, $100 \mu $s length.
-
-Two test boxes were built. It was found out that the cable shields, although connected together, were not grounded in the box. This was observed as a full size signal of about $1.5$ V.  The second version of the box contains extra outputs that allowed us to ground the shields of the connectors (Fig. second box). 
+\item An 8-position rotary switch that enables 4 channels at a time,
+\item The test pulse is a square wave of amplitude roughly \V{4.8}, \micros{100} long and with \micros{1} rise time, emitted at a rate of \Hz{100} (see \cref{sssec:TestBox:TestPulse}).
 \end{itemize}
+
+Two test boxes were designed by Mark Convery and produced at SLAC.
+The cable shields, although connected together, were not grounded to the box
+by design, not to disturb the grounding of the cable shields in the TPC.
+The consequences of this feature, in conjunction with the accidental grounding of wires to the detector ground in ICARUS TPC, is described in \cref{sec:results}.  The second version of the box contains extra outputs that allowed us to ground the shields of the connectors (Fig. second box). 
+
+\subsubsection{The test pulse}
+\label{sssec:TestBox:TestPulse}
+
+The test box emits a test pulse in the form of a square wave about 100 times
+every second (\Hz{100}).
+The test box is powered with three \V{1.5} AA batteries, and no voltage
+regulator is used, resulting in the pulse being as high as the power batteries
+allow. This results to be roughly \V{4.8} and, as described in
+\cref{sec:results}, subject to variations with time and the remaining charge in
+the batteries. The baseline of the pulse is set to half the maximum amplitude.
+
+When connected to the TPC test capacitance, the derivative of the
+test signal is observed on the channels, resulting in a sharp negative
+dip followed after \micros{100} by a sharp positive rise; both of them
+``decay'' following a fast exponential trend (decay time $\tau$ is roughly
+\micros{20}). These signals are on a baseline of about \V{2}, and can reach an
+amplitude as large as \V{1}. The time offset of the oscilloscope trigger is set
+manually on the  oscilloscope itself so that the first peak happens around the
+middle of the acquired time window (usually around \micros{400}).
 
 %SPEND MORE WORDS (regarding schematics of the electronics inside) ON THE TEST BOX!!!!
 
@@ -110,7 +133,7 @@ In order to verify that everything was working properly, the box was tested in-s
 The non-standard chimneys are the 8 corners of both cryostats, see Fig. Apart from the difference in size between standard and non-standard chimneys, the latter ones contain the horizontal and corner wire connectors. \\
 
 As described on \cref{sec:Detector} the configuration of the horizontal wires does not allow to inject a pulse directly to the wires and therefore a different way to test them was developed. \\
-The test pulse was injected to 32 wires of Induction-2 plane at once. From one standard chimney, two or three chimneys away from the corner, a connector between 2 and 9 was choosen and plugged in to a board (<-name?). To pulse those 32 wires we use the same conexion from the test box: a chain LEMO to SMA cables and to one of the 4 red-tagged pulser cables from the chimney.  
+The test pulse was injected to 32 wires of Induction-2 plane at once. From one standard chimney, two or three chimneys away from the corner, a connector between 2 and 9 was chosen and plugged in to a board (<-name?). To pulse those 32 wires we use the same connection from the test box: a chain LEMO to SMA cables and to one of the 4 red-tagged pulser cables from the chimney.  
 
 % -----------------------------------------------------------------------------
 \subsection{Data acquisition}
@@ -119,19 +142,21 @@ The test pulse was injected to 32 wires of Induction-2 plane at once. From one s
 The test box output was monitored and sampled via
 \href{https://www.tek.com/datasheet/digital-phosphor-oscilloscopes-0}{Tektronix
 TDS 3054C oscilloscope}. This oscilloscope can digitise and send out the
-input signals, providing \(10^4\) samples per channel. The data
-acquisition code, written by Sergi Castells, reads a sequence of
+input signals, providing $10^4$ samples per channel, each sample with 8-bit
+precision\footnote{The oscilloscope alternatively allows for 9 bit ADC
+conversion, at the cost of doubling }.
+The data acquisition code, written by Sergi Castells, reads a sequence of
 waveforms from each oscilloscope channel. Each waveform is stored in its
-own comma-separated value file (CSV), with a resolution is of 0.1 µs for
-the time and 10 mV for the signal amplitude. Therefore the waveform
-samples span 1 millisecond, and they are at baseline by roughly 60-80\%
+own comma-separated value file (CSV), with a resolution is of \micros{0.1} for
+the time and \milliV{10} for the signal amplitude. Therefore the waveform
+samples span 1 millisecond, and they are at baseline in roughly 60-80\%
 of the time.
 
 The testing procedure included cycling across all 8 switch positions of
 the test box for each connection, and recording 10 waveforms for each of
 the 4 channels monitored in the selected position. For each switch
 position, therefore, 40 waveforms are recorded. The total data size as
-stored in the final form is about 500 MiB per chimney.
+stored in the final form is about \mebiB{500} per chimney.
 
 % -----------------------------------------------------------------------------
 \subsection{Data sets}
@@ -249,40 +274,5 @@ from connection 18 (\texttt{V18} or \texttt{S18}) down to 1
 switching the test box to the position from 1 to 8 in strict sequence.
 The whole sequence must be strictly followed.
 
-The test diver is unfortunately hard to correctly set up the first time.
-The software is all written in python 2, and it requires both the python
-Visual Instrument Software Architecture (PyVISA, exposing the module
-\texttt{visa}) and CERN ROOT (PyROOT, exposing the module \texttt{ROOT})
-interfaces. It proved hard to get to a configuration where python would
-load both at the same time on OSX, while no Linux laptop was tried. The
-pattern that seemed more likely to succeed was to install PyVISA
-following online instructions found at
-\texttt{https://pyvisa.readthedocs.io/en/master/index.html}, which
-included installing National Instrument backend software {[}1{]}, which
-we used in its release 18.0. After having tested that the \texttt{visa}
-module correctly work, again as described in the linked documentation,
-we compiled ROOT (6.14) from source \emph{in the same environment} (that
-is , in the same shell).
-
-The setup of the test instrumentation is the same as for the software
-from Sergi. The data acquisition session is run within a single
-\texttt{python} session. Its setup includes importing the test driver
-module (\texttt{testDriver.py}), setting the IP address of the
-oscilloscope in use, and finally instantiate the test driver. A possible
-setup sequence is:
-
-\begin{verbatim}
-from testDriver import *
-loadScopeReader('192.168.230.29')
-reader = ChimneyReader()
-\end{verbatim}
-
-After this per-session setup, the data acquisition is driven by choosing
-the chimney (e.g. \texttt{reader.start("EW09")}) and repeatedly call the
-acquisition function (\texttt{reader.next()}). It is also possible to
-skip to remove the last acquisition and repeat it, or skip to a
-different one.
-
-{[}1{]} Registration to National Instruments web site is required in
-order to download the software, but no fee payment was required to
-download the driver package.
+More details about the software used for data acquisition and its setup can be
+found in \cref{app:DAQsoftwareSetup}.

@@ -23,6 +23,7 @@
 % \usepackage{graphics}      % standard graphics specifications
 \usepackage{authblk}  % allows more complex multi-author, multi-affiliation author list
 \usepackage{natbib}   % bibliography as Overleaf likes
+\usepackage{upgreek}  % \upmu...
 
 % \usepackage[dvipsnames,table]{xcolor}
 % \usepackage{subfig}
@@ -60,6 +61,18 @@
 
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Macro definitions
+%%%
+
+% physics quantities
+\newcommand{\micros}[1]{\ensuremath{#1}\,\ensuremath{\upmu{}}s}
+\newcommand{\Hz}[1]{\ensuremath{#1}\,Hz}
+\newcommand{\V}[1]{\ensuremath{#1}\,V}
+\newcommand{\milliV}[1]{\ensuremath{#1}\,mV}
+\newcommand{\mebiB}[1]{\ensuremath{#1}\,MiB}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% Front page definition
@@ -107,6 +120,8 @@
 \include{sections/results}
 
 \appendix
+
+\include{sections/softwaresetup}
 
 \include{sections/software}
 

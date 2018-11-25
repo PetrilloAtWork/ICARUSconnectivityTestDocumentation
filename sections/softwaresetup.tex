@@ -1,0 +1,94 @@
+\section{Setup of acquisition code}
+\label{app:DAQsoftwareSetup}
+
+The data acquisition pattern followed in this test has been described in
+\cref{ssec:streamlined-interactive-data-acquisition}.
+In this section, technical details are described for the set up of the software
+for that acquisition.
+
+All the original code written by Sergi Castells and the following extensions are
+published in a public GIT repository. A copy of that repository is currently
+available in GitHub as
+\href{https://github.com/PetrilloAtWork/ICARUSconnectivityTest}{\texttt{PetrilloAtWork/ICARUSconnectivityTest}}\footnote{%
+URL: \url{https://github.com/PetrilloAtWork/ICARUSconnectivityTest}.}.
+The software used for data acquisition in September 2018 was being developed as
+the need arose. At the beginning, Sergi's code, roughly equivalent to the tag
+\texttt{v01\_00} of the repository above, was used
+directly. By the end of the data acquisition, version \texttt{v03\_00} was used,
+and code was drawn from that version for the analysis as well.
+In the following connectivity test, planned for December 2018, the starting
+version will be \texttt{v04\_00} (see \cref{apx:DAQsoftwareSetup:Future}).
+
+The test driver is unfortunately hard to correctly set up the first time.
+The software is all written in python 2, and it requires both the python
+Visual Instrument Software Architecture (PyVISA, exposing the module
+\texttt{visa}) and CERN ROOT (PyROOT, exposing the module \texttt{ROOT})
+interfaces. It proved hard to get to a configuration where python would
+load both at the same time on OSX, while no Linux laptop was tried. The
+pattern that seemed more likely to succeed was to install PyVISA
+following online instructions found at
+\url{https://pyvisa.readthedocs.io/en/master/index.html}, which
+included installing National Instrument backend software\footnote{%
+Registration to National Instruments web site is required in
+order to download the software, but no fee payment was required to
+download the driver package.
+}, that we used in its release 18.0. After having tested that the \texttt{visa}
+module correctly work, again as described in the linked documentation,
+we compiled ROOT (6.14) from source \emph{in the same environment} (that
+is, in the same shell).
+
+The setup of the test instrumentation is the same as for the software
+from Sergi. The data acquisition session is run within a single
+\texttt{python} session. Its setup includes importing the test driver
+module (\texttt{testDriver.py}), setting the IP address of the
+oscilloscope in use, and finally instantiate the test driver. A possible
+setup sequence is:
+\begin{verbatim}
+from testDriver import *
+loadScopeReader('192.168.230.29')
+reader = ChimneyReader()
+\end{verbatim}
+After this per-session setup, the data acquisition is driven by choosing
+the chimney (e.g. \texttt{reader.start("EW09")}) and repeatedly call the
+acquisition function (\texttt{reader.next()}). It is also possible to
+skip to remove the last acquisition and repeat it, or skip to a
+different one.
+
+Note that for up-to-date instructions the file \texttt{README.md} in the GIT
+repository supersedes the information provided here.
+
+
+\subsection{Improvement implemented for December 2018 test}
+\label{apx:DAQsoftwareSetup:Future}
+
+This section shortly lists improvements that are implemented and will be tested
+for the following connectivity test, the last without the official ICARUS DAQ,
+planned for December 2018.
+\begin{itemize}
+  \item single script working for all oscilloscopes
+  \item configuration of the script driven by configuration file(s)
+  \item integrated verification of the correctness of the data format at the end
+        of the acquisition from a chimney
+  \item generation of a data transfer script
+  \item single connection to the oscilloscope for the whole session (more error
+        prone but \emph{much} faster; \texttt{ChimneyReader.scope().reconnect()}
+        may help to recover connection issues
+  \item ability to jump to a chosen cable and position at any time
+        (\texttt{ChimneyReader.jumpTo()})
+\end{itemize}
+The expected acquisition flow is outlined as follows:
+\begin{enumerate}
+  \item preparation of the data acquisition: start of the python interactive
+        shell, initialisation of `testDriver` helper object with the proper
+        configuration file, selection of the first chimney to read out;
+  \item sequential acquisition of waveforms from all cables, with the same
+        pattern as in September 2018;
+  \item after completion, verification of the data written on the local disk;
+        this may take 5-10 minutes, while the operators may ``close'' the tested
+        chimney and prepare for the acquisition of the next one (but note that
+        if data is found incomplete, more acquisition might need to take place);
+  \item after data is validated, generation of a data transfer script
+  \item execution of the generated script into a separate shell, going in
+        parallel with the rest of the activity
+\end{enumerate}
+The remote destination of the data is specified in the configuration file.

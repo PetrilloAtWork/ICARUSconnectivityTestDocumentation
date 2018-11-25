@@ -1,38 +1,32 @@
 \section{Waveform analysis}
 \label{sec:Analysis}
 
-
 A fast data analysis was performed within hours or days from the data
 acquisition. Each waveform is analysed individually, through a few
 steps:
-
 \begin{itemize}
-\tightlist
-\item
-  baseline identification: average of the central 50\% of the samples
-\item
-  RMS: RMS of the samples used in the baseline determination
-\item
-  extrema determination: amplitude of the positive and negative peaks
-  along the whole waveform
+  \item
+    baseline identification: average of the central 50\% of the samples
+  \item
+    RMS: RMS of the samples used in the baseline determination
+  \item
+    extrema determination: amplitude of the positive and negative peaks
+    along the whole waveform
 \end{itemize}
-
-
 For each channel, the parameters from all the available waveforms (10)
 are averaged to extract:
-
 \begin{itemize}
-\tightlist
-\item
-  baseline RMS (RMS of the 10 baselines)
-\item
-  noise average (average of the 10 RMS, one for of each baseline)
-\item
-  peak amplitude average and its uncertainty (the positive
-  peak from each waveform are averaged)
+  \item
+    baseline RMS (RMS of the 10 baselines)
+  \item
+    noise average (average of the 10 RMS, one for of each baseline)
+  \item
+    peak amplitude average and its uncertainty (the positive
+    peak from each waveform are averaged)
 \end{itemize}
+This analysis is tuned for speed, and it can definitely be refined.
 
-This analysis is aimed for speed, and it can definitely be refined.
+
 
 % ----------------------------------------------------------------------
 \subsection{Baseline and RMS identification}
@@ -42,34 +36,31 @@ This analysis is aimed for speed, and it can definitely be refined.
 The principle is to exclude the signal, intended as the response to the
 pulse, and to use the remaining of the waveform to estimate the
 baseline. The algorithm is designed not to require prior knowledge of
-the position or shape of the peaks.\\
+the position or shape of the peaks.
 
 The signal is shaped as two sharp-rising peaks, which including the
-decay tails are roughly 200 µs or shorter. The algorithm relies on the
+decay tails are roughly \micros{200} or shorter. The algorithm relies on the
 assumption that those two peaks are indeed roughly that narrow, although
 it does not assume anything on their size or shape. It flows as follows:
-
 \begin{enumerate}
-\tightlist
-\item
-  sort all the 10000 samples in increasing order; in this way, the
-  samples taken during the negative peak will be at the left of the
-  data, the ones at the positive peak will be at its right, and the
-  middle of the data will be populated by long sequences of samples with
-  similar values, from the baseline
-\item
-  select the samples from \#2500 to \#7499 from the sorted data for
-  further analysis
-\item
-  take the average and RMS of the selected samples, which will represent
-  the baseline and noise respectively
+  \item
+    sort all the 10000 samples in increasing order; in this way, the
+    samples taken during the negative peak will be at the left of the
+    data, the ones at the positive peak will be at its right, and the
+    middle of the data will be populated by long sequences of samples with
+    similar values, from the baseline
+  \item
+    select the samples from \#2500 to \#7499 from the sorted data for
+    further analysis
+  \item
+    take the average and RMS of the selected samples, which will represent
+    the baseline and noise respectively
 \end{enumerate}
-
 This algorithm may present some bias if the tail from the first peak
 overlaps the second peak. An alternative, simple algorithm would rely on
 the assumption that the peak is on the second half of the waveform, and
 would therefore use the first 40\% or 50\% of the waveform for baseline
-determination as in the last point of the algorithm.\\
+determination as in the last point of the algorithm.
 
 An older version of the algorithm would rely of the knowledge of the
 peak position, and would fail when the waveform does not contain any
@@ -83,23 +74,20 @@ actual signal.
 
 Again a simple algorithm, the peak determination consists of two simple
 steps:
-
 \begin{enumerate}
-\tightlist
-\item
-  determine the absolute maximum and minimum of the waveform
-\item
-  subtract to both the baseline (obtained separately)
+  \item
+    determine the absolute maximum and minimum of the waveform
+  \item
+    subtract to both the baseline (obtained separately)
 \end{enumerate}
-
 This algorithm is affected by the noise on the waveform, which can be
 quantified together with the baseline. Although this is less than ideal,
 the actual noise has been measured to be low enough to be not
-significant for the purpose of the fast analysis we performed{[}1{]}.\\
-
-{[}1{]} In more recent versions of the library, the minimum and maximum
+significant for the purpose of the fast analysis we performed\footnote{%
+In more recent versions of the library, the minimum and maximum
 are not evaluated from the single sample, but replaced by a running
 window average on 5 samples.
+}.
 
 
 % ----------------------------------------------------------------------
@@ -116,7 +104,8 @@ The color code in each figure indicates the values of the baseline, the RMS,
 the positive peak, or the ratio of the positive peak value to
 the baseline value.\\
 
-The corner chimneys, Ch01 and Ch20 in each row, have only the channels
+The corner chimneys, Ch01 and Ch20 in each row (\cref{ssec:nonStd_chimn}),
+have only the channels
 connecting to horizontal wires, where the data was not recorded in this
 round of the connectivity test and therefore is not shown in the plots.
 Cables 1-9 in Ch02 and Ch03 and cables 10-18 in Ch18 and Ch19 are connected
@@ -175,7 +164,7 @@ It thereby shows the dark blue strips in chimneys EE10-14, EW 03-07,
 WE02-12, and WW03-12 in \Cref{fig:pospeak,fig:pospeaktobaseline}.
 Nonetheless, this round of the connectivity test aims to identify
 potential problems in terms of cables, and a single damaged channel
-in the test box should not affect the effectivity.\\
+in the test box should not affect its effectiveness.\\
 
 % voltage
 Since there is no voltage regulator for the battery powering the test
@@ -187,13 +176,13 @@ decrease, gives us a more uniform comparison across the whole detector.\\
 % special cables
 In the EE and WE rows, cables 1-8, cable 9, cables 10-17, and cable 18
 have separate pulse-injecting cables, while in the EW and WW rows, those
-groups are cable 1, cables 2-10, cable 11, and cables 12-18.
-During the tests, we do not have the information on this grouping of
+groups are cable 1, cables 2-9, cable 10, and cables 11-18.
+During the tests, we did not have certain information on this grouping of
 wires, except that cables 1-9 and 10-18 are for induction and collection
 wires, respectively, and have different pulse-injecting cables.
 Consequently, for some chimneys, cables 1-9 are tested with
 the same pulse-injecting cable, and so are cables 10-18; 
-for other chimneys, cables 1-8, 10, 11-17, and 18 are tested with different
+for other chimneys, cables 1-8, 9, 10-17, and 18 are tested with different
 pulse-injecting cables.
 With the cross talk effect discussed in the next paragraph,
 it is not straightforward to distinguish whether the measured signal
@@ -202,7 +191,7 @@ cables, cables 9 and 18 in the EE and WE chimneys and cables 1 and 11
 in the EW and WW chimneys.
 In addition, it is raised that the grouping of the channels for the same
 pulse-injection cables might be cables 1-8, 9, 10-17, 18 for the chimney
-EE02, but cables 1, 2-10, 10-17, 18 for the next chimney, EE03, and
+EE02, but cables 1, 2-9, 10-17, 18 for the next chimney, EE03, and
 similar patterns for other chimneys.
 However, we have not reached a conclusive statement by analyzing the
 current data, which convolved several issues including the cross talk,
@@ -212,10 +201,11 @@ where we expect to have equipment disentangling those issues.\\
 
 % cross talk
 The wires involved in the connectivity test should normally not be connected
-to the detector ground, but it was observed that some of them are during the
-overhaul at CERN.
+to the detector ground, but it was observed during the
+overhaul at CERN that some of them are.
 The design of the test box in this iteration does not connect the wire cables
 to the detector ground, and therefore in the normal case of the wire grounding,
+that is ground wires \emph{not} being connected to the detector ground,
 the cross talk from the adjacent twisted wires contributes a significant
 portion to the signal.
 Roughly speaking, the amplitude of the cross talk signal is similar to
@@ -236,7 +226,46 @@ Further, to distinguish the connected wires among those with the half
 size amplitude, such as cable 8 in chimney WW06, cables 4 and 17 in chimney WW12,
 we explicitly check their grounding.
 The check confirms those wires are grounded and we are reading the injected
-pulse but not the cross talk from adjacent wires.\\
+pulse but not the cross talk from adjacent wires.
+
+While the a grounded, connected channel and the one of a disconnected channel
+both yield a half-amplitude signal, they have different characteristics which
+can in principle be used to resolve them.
+The idea is that the signal measured on a ``standard'' channel is compound of
+its own pulsed signal, accounting according to \cref{table:crosstalk} for half
+the amplitude, and of the signal induced by the cross talk. This induced signal
+is contributed half from channels at one side of the considered channel, which
+therefore contribute one forth of the amplitude, and half from the channels on
+the other side, supplying the remaining one forth of the signal.
+Leveraging this model, it can be conceived that if a channel is connected and
+grounded, in which case we observe on it half-amplitude signal from its own
+pulse, the grounded wire acts as a shield, and therefore does not induce
+crosstalk into adjacent channels, but rather suppresses crosstalk. This would
+suggest that the adjacent channels are induced cross talk only from one side,
+and their total signal would be their own pulsing signal plus the cross talk
+from only one of the two sides, making up for a signal of three quarters of the
+amplitude. On the other hand, if the channel is disconnected (or, ``dead''),
+it is free, it acts like an antenna capturing the half-amplitude signal, but
+neither contributes cross talk nor it shields it: for the adjacent channels,
+it simply does not exist. In that case, the adjacent channels will receive the
+full cross talk from the channels beyond the dead one. The expectation would be
+to have almost full amplitude, barred second order effects.
+In practice, though, it proved very hard to resolve these two cases from the
+available data, in part because the amplitude fluctuations make the decision
+arbitrary, and in part because, as reported later, we did not discover any dead
+channel to test the hypothesis.
+This model is mildly corroborated by the observation that the first channel in
+each cable has a slightly lower amplitude, but that is in no way close to the
+postulated 25\%. Also, no evidence of that effect is visible on the \emph{last}
+channel of the cables. It should be noted though that the last channel does have
+adjacent cables on both sides, since the cable ribbon hosts 34 wire pairs, and
+this complicates the comparison.
+There are hints suggesting the shielding effect on channels adjacent to a
+grounded, connected one, but the observed decrease is in no way conclusive.
+As a consequence, we could not, with the simple analysis we performed, confirm
+or repel this model, which remains just a suggestive hypothesis.
+
+
 
 \input{sections/crosstalktable}
 
