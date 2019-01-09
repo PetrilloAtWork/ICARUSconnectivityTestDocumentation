@@ -1,0 +1,128 @@
+\section{Test methodology}
+\label{sec:methodology}
+
+This test follows broadly the same principles as the one performed in September
+2018.
+To test the electrical continuity, a test pulse is send, and a response is read,
+this time from the connectors to the readout.
+\\
+We perform two tests, by probing two different paths.
+The first path is equivalent to the one used in September 2018: a test pulse is
+sent through the test pulse cables at the bottom of the anode frame, where it is
+distributed typically to 32 or 256 wires (for the single termination card and
+for the eight daisy chained ones, respectively).
+The pulse propagates through the wires, the termination card at the top of the
+anode frame, the 68 pin cables, the \DBB and finally though the interface
+connector on the flange, where it is picked up by our test apparatus.
+The path within the \DBB can be appreciated from \cite{ICARUSDBB}, where it
+enters through a ``WIRE'' port (\eg \texttt{WIRE9\_L}) and through the
+\nanoF{10} capacitor induces onto the front end (\eg \texttt{FE9\_L}).
+\\
+The second path starts by pulsing a bias voltage inlet.
+From there, the pulse is propagated to one side of the nine \DBB (labeled
+``Cable AWG20'' in \cite{ICARUSDBB}) through the common and the channel-specific
+circuitry before reaching the front end readout.
+It should be noted that the bias voltage circuitry is designed for a constant,
+large voltage (\V{300}), while the test pulse is small (a few volt) and rapidly
+changing.
+Therefore, features observed in this test may be not significant for the regular
+operation of the detector.
+\\
+These two paths test different paths of the circuitry.
+The first path, pulsing the wire, tests the full signal path, and barely grazes
+the \DBB circuitry.
+The second one instead skips the wire but goes through the whole set of \DBB
+components.
+While the flanges have been tested for bias voltage distribution, that test is
+not sensitive enough to pin down a failure on a single channel.
+Also, as will be described in the result section (\cref{sec:results}), having a
+test including the wire and one excluding it allowed to pin down very precisely
+a faulty installation where a 68 pin cable was not correctly connected.
+\\
+Both the paths we use for testing are necessarily \emph{discontiguous}: both
+include a \nanoF{10} capacitor on the \DBB just in front of the front end
+outlet, and in addition the wire path an uncalibrated, picofarad-level
+capacitance on the bottom termination card.
+As a consequence, the test can't verify the continuity of the paths, but it has
+rather to interpret a response.
+\\
+In addition, for a few flanges the test on the bias voltage path was performed
+also before the flange being mounted on the detector.
+That configuration is effectively almost identical to the one on the detector,
+with the exception that the wire is not connected at all and, for example, does
+not contribute to pick up noise.
+
+
+\subsection{Test setup}
+\label{ssec:methodology:setup}
+
+The test pulse is generated with a ``test box'' designed by Mark Convery
+(\cref{fig:TestBox}), which includes a pulse generator and also provides
+amplification of the response to the pulse.
+After amplification, the responses are digitised by a four-channel oscilloscope
+(Tektronix TDS3000C) and sent to a program running on a laptop, which can record
+them as waveforms (\cref{fig:TestSetup}).
+\begin{figure}
+  \caption{\label{fig:TestBox}
+    The box used for generating the test pulse and selecting and amplifying the
+    response to it.
+  }
+\end{figure}
+\begin{figure}
+  \caption{\label{fig:TestSetup}
+    The box used for generating the test pulse and selecting and amplifying the
+    response to it.
+  }
+\end{figure}
+
+The path followed by the test pulse is illustrated in the following paragraphs.
+
+The test boxes are the same used in the testing of September 2018, including the
+dead channels (channel 2 in one of the boxes, channel 18 in the other), with
+some upgrade.
+The boxes are powered by three \V{1.5} AA batteries, and they now include a
+voltage regulator that stabilizes the output at about \V{3.3}.
+The test pulses are emitted at a rate of \Hz{100}, each one a positive square
+wave of \V{3.3} with a duration of about \micros{100}.
+Each test box includes two outlets for the same pulse.
+One is sent directly to the oscilloscope to work as a trigger.
+The other is sent to the detector via a lemo to SMA cable: it will be plugged
+either to the test pulse cable or to the bias voltage distribution, to implement
+one of the two test paths described in \cref{sec:methodology}.
+The response to these pulses is read from the front end connectors on the
+flange.
+The standard setup includes the installation of an empty readout minicrate, its
+only purpose to provide mechanical support, and in it a board shaped as a
+readout board, which is in effect just an adapter from the front end connector
+to a 68 pin cable: each of these ``fake'' readout boards includes two such
+adapters, converting at once both the left and the right side connectors,
+and allowing for two different 68 pin cables.
+At a time, the correct one of the two cables (for example, the left one if the
+test is currently pulsing the left bias voltage distribution path) is plugged
+back into the test box, conveying the 32 channels from the \DBB side it is
+connected to.
+The test box contains a eight position switch that selects four contiguous
+channels among the 32 from the cable.
+Signals from the four channels are amplified and offered each on an independent
+outlet.
+These four channels are sent to the oscilloscope for digitization and visual
+inspection.
+The oscilloscope can be driven by commands sent via Ethernet from a laptop,
+where a simple data acquisition program drives the readout and recording of the
+digitized waveforms.
+One of the test boxes also offers ``direct'', non-amplified versions of the
+signal.
+\\
+Noise and grounding have been an issue in the previous session of tests.
+Depending on the grounding of the shield wires, they do actually act as shield,
+or they rather act as antennas picking up noise.
+The upgraded test box allows the option of connecting all the shield wires to
+the ground (which is effectively the oscilloscope ground).
+This option was regularly used in the December 2018 testing session.
+It results into reduced noise and also in reduced signal response, allegedly
+because of reduction of cross talk from other cables.
+In addition, we grounded the oscilloscope chassis to the detector.
+
+
+\subsection{Labelling}
+\label{ssec:labelling}
