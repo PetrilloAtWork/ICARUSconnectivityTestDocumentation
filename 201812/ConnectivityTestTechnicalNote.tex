@@ -17,15 +17,15 @@
 \usepackage{amsmath,amsthm,amssymb,amsfonts}
 \usepackage{float}
 \usepackage{graphicx}
+\usepackage{tabularx}
 \usepackage{fancyhdr}
 % \usepackage{url}           % for on-line citations
 % \usepackage{bm}            % special 'bold-math' package 
-% \usepackage{graphics}      % standard graphics specifications
 \usepackage{authblk}  % allows more complex multi-author, multi-affiliation author list
-\usepackage{natbib}   % bibliography as Overleaf likes
+\usepackage[numbers]{natbib} % bibliography as Overleaf likes, with numerical citations
 
 % \usepackage[dvipsnames,table]{xcolor}
-% \usepackage{subfig}
+\usepackage{subfig}
 
 
 %for the links
@@ -119,8 +119,8 @@
 
 \include{sections/glossary}
 
-% uncomment when we actually have some references to refer to
-\bibliographystyle{plain}
+
+\bibliographystyle{plainnat}
 \bibliography{references} % check references.bib
 
 

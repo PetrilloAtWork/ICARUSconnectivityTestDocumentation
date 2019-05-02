@@ -1,3 +1,72 @@
 \section{Test software}
 \label{sec:software}
 
+
+\subsection{Data sets}
+\label{ssec:software:datasets}
+
+The original acquisition software grants the operator some options that affect
+the name of the waveform files. An acquisition-driving code was developed that
+reduces those options and enforces a file name pattern:
+\begin{verbatim}
+waveform_CH<channel>_CHIMNEY_<chimney>_CONN_<cable>_POS_<position>_<index>.csv
+\end{verbatim}
+where the elements, defined in \cref{ssec:labelling}, are:
+\begin{description}
+  \item[\texttt{<channel>}] is the \emph{oscilloscope channel} the waveform is read from, which ranges from \texttt{1} to \texttt{4}
+  \item[\texttt{<chimney>}] is in the form \texttt{<module><side><row>}, \texttt{WE07}
+  \item[\texttt{<cable>}] is the label of the cable plugged in the test box, e.g.\ \texttt{V05}
+  \item[\texttt{<position>}] is the setting of the test box switch
+  \item[\texttt{<index>}] is a waveform counter;
+    following Sergi's convention, this is a sequential number unique
+    within waveforms on the same connector and oscilloscope channel.
+    Assuming that 10 waveforms are taken per channel, position
+    \texttt{POS\_1} will have indices from \texttt{1} to \texttt{10},
+    \texttt{POS\_2} from \texttt{11} to \texttt{20}, and so on, up to
+    \texttt{POS\_8} with indices \texttt{71} to \texttt{80}.
+\end{description}
+
+320 waveform files are expected per cable (10 waveforms for each of
+32 channels, split in 4 oscilloscope channels and 8 test box switch
+positions), and 5760 per chimney. These files are stored in separate
+directories, one per chimney. The name of the directory follows the same
+convention as above, that is \texttt{CHIMNEY\_<chimney>} (e.g.\ 
+\texttt{CHIMNEY\_WE07}).
+\\
+The whole data set taken in the test session of August 2018 is currently
+stored in Fermilab dCache at the path:
+\begin{verbatim}
+/pnfs/icarus/persistent/commissioning/connectivity/201808
+\end{verbatim}
+
+
+
+\subsection{Data format}
+\label{ssec:software:dataformats}
+
+Each waveform is stored in its own comma-separated value file (CSV). The file name follows the pattern described above. Each line in the file corresponding to a sample, totaling 10000 lines for each waveform. Each sample is described by values in floating point text representation, with scientific notation: time in seconds, and signal level in volt. For example:
+
+\begin{verbatim}
+0.0,2.08
+1e-07,2.08
+2e-07,2.12
+[...]
+\end{verbatim}
+
+No metadata is saved in the file. This data format can be easily read directly by ROOT \texttt{TGraph}.
+
+
+
+\subsection{Streamlined interactive data acquisition}
+\label{ssec:software:streamlinedDAQ}
+
+The original code by Sergi Castells required the operator to change
+parameters on the command line on each acquisition, plus an additional step at the end of the test each connector, that is to reset a counter stored in a text file.
+
+After a few interactions with this approach, we wrote additional
+software (\emph{test driver}) automating most of the steps required from the operator. This enforced a specific procedure both for testing and for software setup.
+
+The procedure comprises testing one chimney at a time, and proceeding from connection 18 (\texttt{V18} or \texttt{S18}) down to 1 (\texttt{V01} or \texttt{S01}), and on each connector test the channel switching the test box to the position from 1 to 8 in strict sequence. The whole sequence must be strictly followed.
+
+More details about the software used for data acquisition and its setup can be found in \ref{appendix-A}.
+
