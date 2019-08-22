@@ -57,6 +57,66 @@ No metadata is saved in the file. This data format can be easily read directly b
 
 
 
+\subsection{Channel identification and mapping}
+\label{ssec:software:channelMapping}
+
+The data has been collected chimney by chimney and cable by cable, with 8 sequential acquisition runs per cable corresponding to the eight test box switch positions.
+The following elements may be used for identifying a channel (see also \cref{ssec:labelling}):
+\begin{description}
+  \item[chimney] always represented as \texttt{<module><side><row>}, e.g.\ \texttt{WE07} (see \cref{fig:ChimneyLabelling})
+  \item[flange] usually matches the chimney; in case of the end chimney, the flange is further identified by its position on it, as bottom (\texttt{b}), middle (\texttt{m}) or top (\texttt{t})
+  \item[cable] a letter and a zero-padded two-digit cable number; cable number range is from 01 to 18 for short chimneys, 01 to 33 for the two top flanges of the end chimneys
+  \item[channel] the number of channel within a cable, from 1 to 32
+  \item[slot] the slot where the readout board (real or test) is inserted, from 1 to 9
+  \item[side] the side of the cable the channel is on, left or right, always defined considering slot 1 to be on top (in the flanges of some end chimneys, this ends up swapping flange left and right labels with respect to the observer's)
+  \item[switch position] one of eight possible positions for the test box switch, from 1 to 8
+  \item[oscilloscope channel] number of the oscilloscope channel used for the digitization of the channel, from \texttt{CH1} to \texttt{CH4}
+  \item[readout channel] the channel number on a flange according to the TPC readout firmware, from 0 to 575
+  \item[board] the number of board in the readout minicrate, from 0 to 8
+  \item[board channel] the number of channel within the readout board\cite{FEreadoutBoard}, from 0 to 63
+\end{description}
+
+The commonly used combinations of these elements to identify a channel are:
+\begin{itemize}
+  \item \emph{chimney/cable/channel}, currently the most standard notation
+  \item \emph{flange/readout channel}, used in early readout pulse runs
+  \item \emph{chimney/cable/switch position/oscilloscope channel}, used in connectivity test data storage
+\end{itemize}
+
+\Cref{table:NotationConversion} summarizes the relations between some of these elements.
+
+\begin{table}
+  {
+    \small
+    \begin{tabular}{|l|c|c|l|}
+      \hline
+      element    (symbol)   & range                                       & example        & conversions \\
+      \hline
+      chimney       ($C$)   & \texttt{[EW]}\texttt{[EW]}\texttt{<01-20>}  & \texttt{WE07}  & \\
+      cable number  ($c$)   & 01--18, 01--33                              & 15             & \\
+      channel       ($ch$)  & 1--32                                       & 27             & \\
+      \hline
+      slot          ($S$)   & 1--9                                        & 6              & $S = B + 1$ \\
+      side          ($s$)   & 0 \emph{(L)}, 1 \emph{(R)}                  & 1 (R)          & $\theta\left(c \geq 10\right)$ \\ 
+      switch pos.   ($p$)   & 1--8                                        & 7              & $(c - 1) \mod 4 + 1$ \\
+      osc. channel  ($CH$)  & 1--4                                        & \texttt{CH3}   & $(c - 1) \div 4 + 1$ \\
+      \hline
+      flange        ($F$)   & \texttt{<$C$>}\texttt{[bmt]}                & \texttt{EE01m} & $F = C$ (removing any suffix if present) \\
+      board         ($B$)   & 0--8                                        & 5              & $B = (c - 1) \mod 9$ \\
+      board channel ($b$)   & 0--63                                       & 37             & $b = 32 s + (32 - ch)$ \\
+      readout channel ($r$) & 0--575                                      & 357            & $r = 64 B + b$ \\
+      \hline
+    \end{tabular}
+  }
+  \label{table:NotationConversion}
+  \caption{
+    Conversion between elements used to identify a channel.
+    All examples except for the flange refer to the same channel.
+    Conversions are valid only for short chimneys.
+  }
+\end{table}
+
+
 \subsection{Streamlined interactive data acquisition}
 \label{ssec:software:streamlinedDAQ}
 

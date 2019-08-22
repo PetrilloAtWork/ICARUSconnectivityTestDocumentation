@@ -11,11 +11,82 @@ details on the different sessions).
 \label{ssec:responses}
 
 
+During the operations, a number of issues with the instrumentation arose and
+were solved or worked around on a regular basis.
+The two test boxes became worn, and their connector to the cable was damaged so
+that pins would be pushed inside the box, sometimes at the point where the
+electric connection was unstable or compromised. This was eventually the case
+for a single channel on each box: channel 2 (switch position 1, \texttt{CH2})
+and channel 18 (switch position 5, \texttt{CH2}, \cref{fig:TestBoxDeadChannel})
+were almost always \emph{disconnected}, with the exceptions of test of
+individual cables with unusually long pins which would still reach the 
+connector.
+
 % show some waveforms (digitized or pictures), and explain them:
 %  * bias voltage test
-%  * test capacitance on top chimneys
+\begin{figure}
+  \centering
+    \includegraphics[width=0.9\textwidth]{fig/dummy}
+  \caption{
+    Digitized response to injection of a test pulse into the bias voltage circuitry.
+    This is \texttt{NN00} \texttt{Z00} channel 0.
+    \label{fig:BiasVoltageResponse}
+  }
+\end{figure}
+
+\Cref{fig:TestPulseResponse} shows typical response of the channels to a test
+pulse injected into the test capacitance of the termination card to the wire.
+The pulse is differential with respect to the input pulse, and the time between
+the positive and the negative peaks matches the duration of the test pulse
+(\micros{\approx 100}) and the time constant reflects the characteristics of the
+full circuit including test capacitance, DBB capacitance and the circuit
+capacitance. The amplitude in this test uses to be \milliV{200-300}
+for the full length second induction and collection wires, and it includes a
+contribution from the inducing pulse as well as induction from other channels
+being pulsed at the same time, including from adjacent \emph{cables}.
+\begin{figure}
+  \centering
+    \includegraphics[width=0.9\textwidth]{fig/CPULSEWaves_ChimneyEE07_ConnV14_Pos5}
+  \caption{
+    Response to a pulse on test capacitance.
+    This is \texttt{EE07} \texttt{V14} channels 17--20.
+    Also note the failing connection to channel 18 (switch position 5, \texttt{CH2}).
+    \label{fig:TestPulseResponse}
+    \label{fig:TestBoxDeadChannel}
+  }
+\end{figure}
+
+\begin{figure}
+  \centering
+    \includegraphics[width=0.9\textwidth]{fig/CPULSEWaves_ChimneyEE07_ConnV14_Pos5}
+  \caption{
+    Response to a pulse on test capacitance.
+    This is \texttt{EE07} \texttt{V14} channels 17--20.
+    Also note the failing connection to channel 18 (switch position 5, \texttt{CH2}).
+    \label{fig:TestPulseResponse}
+    \label{fig:TestBoxDeadChannel}
+  }
+\end{figure}
 %  * test capacitance on top chimneys, pure induction (e.g. EE02)
+\begin{figure}
+  \centering
+    \includegraphics[width=0.9\textwidth]{fig/dummy}
+  \caption{
+    Digitized response induced on a short wire not connected to test capacitance.
+    This is \texttt{NN00} \texttt{Z00} channel 0.
+    \label{fig:TestPulseResponseShortWires}
+  }
+\end{figure}
 %  * test capacitance on end chimneys
+\begin{figure}
+  \centering
+    \includegraphics[width=0.9\textwidth]{fig/dummy}
+  \caption{
+    Digitized response induced on a wire from the first induction plane by pulsing a series of termination boards with test capacitance.
+    This is \texttt{NN00} \texttt{Z00} channel 0.
+    \label{fig:TestPulseResponseTallChimney}
+  }
+\end{figure}
 
 
 \subsection{Observed issues (and mitigations)}
@@ -49,6 +120,41 @@ It should be clear that the category names are just a possible interpretation of
 the issue deduced from the observations. In other words, for example there is
 no conclusive evidence that the wire of any channel in the category ``broken
 wires'' is actually broken.
+\\
+The full list of these channels is in \cref{table:BadChannelList}.
+\begin{table}
+  {
+    \centering
+    \begin{tabular}{|lll|lll|}
+      \hline
+      \Chimney{EE02} & \Cable{V01} & channel  8, 9 and 12 & \Chimney{WE01} & \Cable{C02} & channel   1        \\
+      \Chimney{EE04} & \Cable{V18} & channel 14           & \Chimney{WE02} & \Cable{V01} & channel  8 and 25  \\
+      \Chimney{EE05} & \Cable{V01} & channel 18           & \Chimney{WE11} & \Cable{V16} & channel  6         \\
+      \Chimney{EE06} & \Cable{V17} & channel  7           & \Chimney{WE16} & \Cable{V12} & channel  6         \\
+      \Chimney{EE09} & \Cable{V02} & channel 27           & \Chimney{WE17} & \Cable{V01} & channel 18         \\
+      \Chimney{EE15} & \Cable{V08} & channel 20           & \Chimney{WE19} & \Cable{V04} & channel  7         \\
+      \Chimney{EE15} & \Cable{V08} & channel 20           & \Chimney{WE20} & \Cable{D33} & channels  22--28   \\
+      \hline
+      \Chimney{EW01} & \Cable{A15} & channel   4          & \Chimney{WW01} & \Cable{A18} & channel 24         \\
+      \Chimney{EW01} & \Cable{A17} & channels 19 and 20   & \Chimney{WW01} & \Cable{A33} & channel 30         \\
+      \Chimney{EW01} & \Cable{A21} & channel  19          & \Chimney{WW01} & \Cable{A33} & channel 30         \\
+      \Chimney{EW01} & \Cable{A27} & channel 13           & \Chimney{WW02} & \Cable{S09} & channel 20         \\
+      \Chimney{EW01} & \Cable{A27} & channel 13           & \Chimney{WW08} & \Cable{S11} & channel 29         \\
+      \Chimney{EW03} & \Cable{S13} & channel 29           & \Chimney{WW08} & \Cable{S11} & channel 29         \\
+      \Chimney{EW08} & \Cable{S11} & channel 16           & \Chimney{WW19} & \Cable{S18} & channel  8 and 25  \\
+      \Chimney{EW11} & \Cable{S10} & channel  6           & \Chimney{WW20} & \Cable{B15} & channel  1         \\
+      \Chimney{EW19} & \Cable{S18} & channel 24 and 25    &                &             &                    \\
+      \Chimney{EW20} & \Cable{B01} & channels  1--15      &                &             &                    \\
+      \Chimney{EW20} & \Cable{B33} & channel  14          &                &             &                    \\
+      \hline
+    \end{tabular}
+    \\
+  }
+  \caption{
+    List of channels (chimney, cable and channel on cable) with potential or confirmed issues.
+  }
+  \label{table:BadChannelList}
+\end{table}
 
 
 \subsubsection{Non-responsive channels}
@@ -223,6 +329,4 @@ The data is currently stored in ICARUS data area at \\
 and archived in ICARUS dCache area at \\
 \texttt{/pnfs/icarus/persistent/commissioning/connectivityTest/201812/archive}.\\
 The data obsoleted by the changes reported above is still kept in the \texttt{old} subdirectory.
-
-
 

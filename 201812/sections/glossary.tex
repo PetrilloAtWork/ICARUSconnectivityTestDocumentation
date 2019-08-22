@@ -2,7 +2,16 @@
 \label{sec:glossary}
 
 \begin{description}
-  \item[DBB] \emph{Decoupling and Biasing Board}, 
   \item[T300] each of the two modules of the ICARUS detector, including its own cryostat, two drift volumes (TPC), for a reference argon mass of 300 tonnes
   \item[TPC] (\emph{Time Projection Chamber}) is defined as a unit including a single uniform drift volume, a cathode and a (composite) anode. In ICARUS, each cathode is shared by two TPCs. This is also the definition of TPC used in the official simulation and reconstruction software (LArSoft)
+  \item[wire] unless specified to be one of the conducting wires within a cable, it's intended to be a TPC wire
+  \item[DBB] \emph{Decoupling and Biasing Board}, used to convey bias voltage to the TPC wires and to read the signal induced on those wires
+  \item[cable] the 68-wire flat cable connecting 32 TPC wires to a DBB
+  \item[channel] a single data acquisition channel, connected to a single TPC wire
+  \item[switch position] one of the eight different positions of the test box selecting 4 out of the 32 channels on a cable
+  \item[oscilloscope channel] one of the four osciloscope channels used for the digitization of the response to test pulses
+%   \item[signal wire] any of the 32 cable wires electrically connected to the TPC wire
+%   \item[shield wire] any of the 32 cable wires not electrically connected to the TPC wire (expected to be grounded by the readout board, but sometimes already grounded to the anode frame)
+%   \item[BV] bias voltage (and the circuit allowing its distribution to the wires)
+%   \item[TC] test capacitance (and the cable allowing to pulse it)
 \end{description}
